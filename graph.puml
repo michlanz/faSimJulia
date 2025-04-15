@@ -1,0 +1,179 @@
+@startuml EventGraph
+hide circle
+hide stereotype
+
+skinparam class<<P>> {
+    'BackgroundColor White
+    FontColor Black
+    BorderColor Black
+}
+skinparam class<<EG>> {
+    BackgroundColor business
+    FontColor Black
+    BorderColor Black
+}
+skinparam class<<EL>> {
+    BackgroundColor Motivation
+    FontColor Black
+    BorderColor Black
+}
+skinparam class<<EU>> {
+    BackgroundColor Motivation
+    FontColor Black
+    BorderColor Black
+}
+
+'Parametri =====================================================
+class "Parameters" as params <<P>> {
+    Q: product type
+    A: core type
+    B: blowing stage
+    Bh: blowing machine
+    P: painting stage (single machine)
+    D: drying stage (single machine)
+    W: warehouse stage (single machine)
+    C: casting stage (single line)
+    'x: units per cart (max 40)
+    's: units per ladle
+    --
+    i = {1 ... 200}: core index
+    j = {1,2}: binder type
+    k = {1 ... 14}: product index
+    h = {1 ... 10}: blowing machine index
+    z = {B, P, D, W, C}: process stage
+}
+
+'Classi di evento =============================================
+class "1.arrive" as E1 <<EG>> {
+    +arrive()
+    --
+    +z == B
+    +Qk++
+    +Qk--
+    +Aijkz++
+}
+
+class "2.load blowing" as E2 <<EL>> {
+    +load_blowing()
+    --
+    +Bh++
+    +Aijkz--
+}
+
+class "3.unload blowing" as E3 <<EU>> {
+    +unload_blowing()
+    --
+    +z == p
+    +Bh--
+    +Aijkz++
+}
+
+class "4.rebatching" as E4 <<EG>> {
+    +rebatching()
+    --
+    Aijkz = r*A'ijkz
+    Aijkz--
+    A'ijkz += r 
+}
+
+class "5.load painting" as E5 <<EL>> {
+    +load_painting()
+    --
+    +P++
+    +A'ijkz--
+}
+
+class "6.unload painting" as E6 <<EU>> {
+    +unload_painting()
+    --
+    +z == d
+    +P--
+    +A'ijkz++
+}
+
+class "7.load drying" as E7 <<EL>> {
+    +load_drying()
+    --
+    +D++
+    +A'ijkz--
+}
+
+class "8.unload drying" as E8 <<EU>> {
+    +unload_drying()
+    --
+    +z == w
+    +D--
+    +A'ijkz++
+}
+
+class "9.load warehouse" as E9 <<EL>> {
+    +load_warehouse()
+    --
+}
+
+class "10.rebatching" as E10 <<EG>> {
+    +rebatching()
+    --
+    A'ijkz = A'ijkz/r
+    A'ijkz -= r
+    Aijkz++ 
+}
+
+class "11.unload warehouse" as E11 <<EU>> {
+    +unload_warehouse()
+    --
+    +z == c
+    +W--
+    +Aijkz++
+}
+
+class "12.load line" as E12 <<EL>> {
+    +load_line()
+    --
+    +C++
+    +Aijkz--
+}
+
+class "13.ladle change" as E13 <<EG>> {
+    +ladle_change()
+    --
+}
+
+class "14.unload line" as E14 <<EU>> {
+    +unload_line()
+    --
+    +C--
+}
+
+class "15.exit system" as E15 <<EG>> {
+    +exit_system()
+}
+
+' Archi =====================================================
+params -[hidden]--> E1
+E1 -up-> E1 : Ta
+E1 -down-> E2 : "Aijkz > 0\nBh = 0 (idle)"
+E2 -down-> E3 : Thij
+E3 -up-> E2 : "Aijk(z = B) > 0\nBh = 0"
+E3 -down-> E4
+E4 -right-> E5 : "      A'ijkz > 0       \nP = 0"
+E5 -up-> E6 : Tpij
+E6 -down-> E5 : "A'ijk(z = P) > 0"
+E6 -up-> E7 : "A'ijkz > 0\nD < 15"
+E7 -up-> E7 : "A'ijkz > 0\nD < 15"
+E7 -up-> E8 : Tdij
+E8 -down-> E7: "A'ijk(z = D) > 0\nD < 15"
+E8 -right-> E9: "                   "
+E9 -down-> E10
+E10 -down-> E11 : "Aijkz > 0\nC = 0"
+E11 -right-> E12: "    Tsuij       "
+E12 --> E13 : //
+E12 --> E14
+E13 --> E12
+E14 --> E11 : Aijkz > 0\nC = 0
+E14 --> E15
+
+
+@enduml
+
+'"A'ij(z=D) > 0\nD < 15"
