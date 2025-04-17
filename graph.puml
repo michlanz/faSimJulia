@@ -71,9 +71,9 @@ class "3.unload blowing" as E3 <<EU>> {
 class "4.rebatching" as E4 <<EG>> {
     +rebatching()
     --
-    Aijkz = r*A'ijkz
+    Aijkz = r(i)*A'ijkz
     Aijkz--
-    A'ijkz += r 
+    A'ijkz += r(i)
 }
 
 class "5.load painting" as E5 <<EL>> {
@@ -114,8 +114,8 @@ class "9.load warehouse" as E9 <<EL>> {
 class "10.rebatching" as E10 <<EG>> {
     +rebatching()
     --
-    A'ijkz = A'ijkz/r
-    A'ijkz -= r
+    A'ijkz = A'ijkz/r(i)
+    A'ijkz -= r(i)
     Aijkz++ 
 }
 
