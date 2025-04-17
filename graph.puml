@@ -23,26 +23,6 @@ skinparam class<<EU>> {
     BorderColor Black
 }
 
-'Parametri =====================================================
-class "Parameters" as params <<P>> {
-    Q: product type
-    A: core type
-    B: blowing stage
-    Bh: blowing machine
-    P: painting stage (single machine)
-    D: drying stage (single machine)
-    W: warehouse stage (single machine)
-    C: casting stage (single line)
-    'x: units per cart (max 40)
-    's: units per ladle
-    --
-    i = {1 ... 200}: core index
-    j = {1,2}: binder type
-    k = {1 ... 14}: product index
-    h = {1 ... 10}: blowing machine index
-    z = {B, P, D, W, C}: process stage
-}
-
 'Classi di evento =============================================
 class "1.arrive" as E1 <<EG>> {
     +arrive()
@@ -150,7 +130,6 @@ class "15.exit system" as E15 <<EG>> {
 }
 
 ' Archi =====================================================
-params -[hidden]--> E1
 E1 -up-> E1 : Ta
 E1 -down-> E2 : "Aijkz > 0\nBh = 0 (idle)"
 E2 -down-> E3 : Thij
