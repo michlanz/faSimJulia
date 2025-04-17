@@ -168,8 +168,8 @@ E9 -down-> E10
 E10 -down-> E11 : "Aijkz > 0\nC = 0"
 E11 -right-> E12: "    Tsuij       "
 E12 --> E13 : //
-E12 --> E14
-E13 --> E12
+E12 --> E14 : Tcij
+E13 --> E12 : Tchange
 E14 --> E11 : Aijkz > 0\nC = 0
 E14 --> E15
 
