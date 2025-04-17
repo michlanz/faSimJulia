@@ -63,7 +63,7 @@ class "2.load blowing" as E2 <<EL>> {
 class "3.unload blowing" as E3 <<EU>> {
     +unload_blowing()
     --
-    +z == p
+    +z == P
     +Bh--
     +Aijkz++
 }
@@ -86,7 +86,7 @@ class "5.load painting" as E5 <<EL>> {
 class "6.unload painting" as E6 <<EU>> {
     +unload_painting()
     --
-    +z == d
+    +z == D
     +P--
     +A'ijkz++
 }
@@ -101,7 +101,7 @@ class "7.load drying" as E7 <<EL>> {
 class "8.unload drying" as E8 <<EU>> {
     +unload_drying()
     --
-    +z == w
+    +z == W
     +D--
     +A'ijkz++
 }
@@ -122,7 +122,7 @@ class "10.rebatching" as E10 <<EG>> {
 class "11.unload warehouse" as E11 <<EU>> {
     +unload_warehouse()
     --
-    +z == c
+    +z == C
     +W--
     +Aijkz++
 }
